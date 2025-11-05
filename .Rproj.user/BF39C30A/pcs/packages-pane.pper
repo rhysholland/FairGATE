@@ -1,7 +1,0 @@
-{
-    "installOptions": {
-        "installFromRepository": false,
-        "libraryPath": "/Users/k2584926/Library/R/arm64/4.5/library",
-        "installDependencies": true
-    }
-}
