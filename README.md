@@ -273,7 +273,7 @@ A `ggplot2` Sankey chart showing group-to-expert routing patterns.
 
 See the vignette for a full worked example using simulated clinical data:
 
-👉 [**Vignette: Introduction to fairGATE**](vignettes/)
+👉 [**Vignette: Introduction to fairGATE**](doc/)
 
 Example (simplified):
 
