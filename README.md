@@ -1,6 +1,6 @@
 # fairGATE <img src="https://img.shields.io/badge/CRAN-Downloadable-brightgreen" alt="Status Badge" align="right"/>
 
-**fairGATE** is an R package for training and analysing **fairness-aware gated neural networks** (Mixture-of-Experts models) designed for **subgroup-aware prediction and interpretability** in many types of data, including but not limited to: health, clinical and economic data. Developed under the supervision of Dr Raquel Iniesta ([https://www.kcl.ac.uk/people/raquel-iniesta])
+**fairGATE** is an R package for training and analysing **fairness-aware gated neural networks** (Mixture-of-Experts models) designed for **subgroup-aware prediction and interpretability** in many types of data, including but not limited to: health, clinical and economic data. Developed under the supervision of Dr Raquel Iniesta [https://www.kcl.ac.uk/people/raquel-iniesta]
 
 ### ⬇️ Now Downloadable via CRAN in RStudio
 
