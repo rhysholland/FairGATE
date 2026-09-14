@@ -1,0 +1,19 @@
+{
+  "name": "fairGATE dev",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "REditorSupport.r",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  "postCreateCommand": "R -e \"remotes::install_deps(dependencies = TRUE)\"",
+  "remoteEnv": {
+    "TORCH_HOME": "/opt/libtorch"
+  }
+}
