@@ -1,2 +1,8 @@
 .DS_Store
 .Rproj.user/
+
+# local scratch and preview files (not part of the package)
+v3_fairgate_runs*.csv
+_pharos_render/
+*.Rcheck/
+fairGATE_*.tar.gz

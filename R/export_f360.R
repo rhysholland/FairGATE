@@ -112,6 +112,11 @@ export_f360_csv <- function(gnn_results,
   }
 
   # ---- Base output frame ----
+  # `iteration` is carried through so that each prediction stays identified by
+  # the split it came from. Without it, the gate-column merge below matches on
+  # subjectid alone and every prediction is duplicated once per split, which
+  # both inflates the row count and pairs each individual's gate weights with
+  # another individual's prediction.
   df <- data.frame(
     subjectid   = subjectid,
     y_true      = y_true,
@@ -121,6 +126,8 @@ export_f360_csv <- function(gnn_results,
     group_label = group_labels,
     stringsAsFactors = FALSE
   )
+  has_iter <- "iteration" %in% names(fr)
+  if (has_iter) df$iteration <- fr$iteration
 
   # ---- Optional: add gate probabilities / entropy ----
   if (isTRUE(include_gate_cols) &&
@@ -129,11 +136,23 @@ export_f360_csv <- function(gnn_results,
 
     gw <- gnn_results$gate_weights
     if ("subjectid" %in% names(gw)) {
-      keep_cols <- c("subjectid",
+      by_cols <- if (has_iter && "iteration" %in% names(gw)) c("iteration", "subjectid") else "subjectid"
+      if (!identical(by_cols, c("iteration", "subjectid")) && verbose) {
+        message("No `iteration` column available on both tables; merging on subjectid alone. ",
+                "If predictions come from repeated splits this will duplicate rows.")
+      }
+      keep_cols <- c(by_cols,
                      grep("^gate_prob_expert_", names(gw), value = TRUE),
                      intersect("gate_entropy", names(gw)))
       gw_keep <- gw[, keep_cols, drop = FALSE]
-      df <- merge(df, gw_keep, by = "subjectid", all.x = TRUE, sort = FALSE)
+      n_before <- nrow(df)
+      df <- merge(df, gw_keep, by = by_cols, all.x = TRUE, sort = FALSE)
+      if (nrow(df) != n_before) {
+        warning(sprintf(paste0("Gate-column merge changed the row count from %d to %d, which means the ",
+                               "merge keys (%s) are not unique. Fairness metrics computed from this file ",
+                               "will be based on duplicated rows."),
+                        n_before, nrow(df), paste(by_cols, collapse = " + ")))
+      }
     } else if (verbose) {
       message("gate_weights present but missing subjectid; skipping gate columns.")
     }

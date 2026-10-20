@@ -13,6 +13,22 @@
 #' @param nonparametric Logical; if TRUE and k>2, use Kruskal-Wallis + Wilcoxon instead of ANOVA + Tukey.
 #'
 #' @return A list of ggplots, test results, and summary tables.
+#' @examples
+#' \donttest{
+#' if (requireNamespace("torch", quietly = TRUE) && torch::torch_is_installed()) {
+#'   data("adult_ready_small", package = "fairGATE")
+#'   d <- adult_ready_small
+#'   # drop columns with missing values or no variation before scaling
+#'   keep <- vapply(d, function(v) !anyNA(v) && (!is.numeric(v) || stats::sd(v) > 0), TRUE)
+#'   pd <- prepare_data(d[, keep], outcome_var = "income", group_var = "sex")
+#'   fit <- train_gnn(pd, run_tuning = FALSE,
+#'                    best_params = list(lr = 0.01, hidden_dim = 8, dropout_rate = 0.1,
+#'                                       lambda = 1, temperature = 1),
+#'                    num_repeats = 1, epochs = 5, seed = 1)
+#'   res <- analyse_gnn_results(fit, pd)
+#'   names(res)
+#' }
+#' }
 #' @export
 #' @import ggplot2
 #' @import magrittr
@@ -116,6 +132,14 @@ analyse_gnn_results <- function(gnn_results,
   }
   auc_gated   <- get_metric(perf_tbl, "AUC")
   brier_gated <- get_metric(perf_tbl, "Brier Score")
+  # train_gnn() no longer reports the Brier score (since 1.0.0); compute it
+  # from the held-out predictions of a binary outcome so that the
+  # calibration plot subtitle and `out$brier` are not NA.
+  if (is.na(brier_gated) && !is.null(results_all) &&
+      all(c("true", "prob") %in% names(results_all)) &&
+      all(results_all$true %in% c(0, 1, NA))) {
+    brier_gated <- mean((results_all$true - results_all$prob)^2, na.rm = TRUE)
+  }
 
   out$metrics_table <- perf_tbl
   out$auc   <- auc_gated

@@ -1,0 +1,12 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.git$
+^\.gitignore$
+^\.devcontainer$
+^doc$
+^Meta$
+^v3_fairgate_runs.*\.csv$
+^cran-comments\.md$
+^CRAN-SUBMISSION$
+^\.DS_Store$
+^.*\.tar\.gz$

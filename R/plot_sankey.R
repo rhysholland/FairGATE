@@ -13,6 +13,22 @@
 #' @param verbose       Logical; print progress.
 #'
 #' @return A ggplot object.
+#' @examples
+#' \donttest{
+#' if (requireNamespace("torch", quietly = TRUE) && torch::torch_is_installed()) {
+#'   data("adult_ready_small", package = "fairGATE")
+#'   d <- adult_ready_small
+#'   # drop columns with missing values or no variation before scaling
+#'   keep <- vapply(d, function(v) !anyNA(v) && (!is.numeric(v) || stats::sd(v) > 0), TRUE)
+#'   pd <- prepare_data(d[, keep], outcome_var = "income", group_var = "sex")
+#'   fit <- train_gnn(pd, run_tuning = FALSE,
+#'                    best_params = list(lr = 0.01, hidden_dim = 8, dropout_rate = 0.1,
+#'                                       lambda = 1, temperature = 1),
+#'                    num_repeats = 1, epochs = 5, seed = 1)
+#'   p <- plot_sankey(pd, fit, use_profiles = FALSE)
+#'   print(p)
+#' }
+#' }
 #' @export
 #' @import ggplot2
 #' @import ggalluvial

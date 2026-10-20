@@ -1,42 +1,64 @@
 Package: fairGATE
-Title: FairGATE (Fair Gated Algorithm for Targeted Equity) 
-Version: 0.1.0
+Title: Fair Gated Algorithm for Targeted Equity
+Version: 1.0.0
 Authors@R: 
-    person("Rhys", "Holland", , "rhys.holland@icloud.com", role = c("aut", "cre"))
-Description: Tools for training and analysing fairness-aware gated neural 
-    networks for subgroup-aware prediction and interpretation in clinical datasets. 
-    Methods draw on prior work in mixture-of-experts neural networks by
+    c(
+      person("Rhys", "Holland", email = "rhys.holland@icloud.com",
+             role = c("aut", "cre")),
+      person("Raquel", "Iniesta", 
+             email = "raquel.iniesta@kcl.ac.uk",
+             role = "aut")
+    )
+Description: Fairness-aware correction of a prediction model for binary and
+    continuous outcomes with two or more protected groups and their
+    intersections. A cross-fitted base learner (gradient-boosted trees or a
+    neural network) is fitted without the protected attribute, and a gated
+    mixture of neural experts learns a per-person correction to its score
+    under a fairness penalty (a random-effects or variance penalty on
+    outcome-stratified group means, or a thresholded worst-group penalty on
+    error rates), with a cross-fitted disparity signal, an intervention cost,
+    smoothed early stopping, a per-person export of adjustments with
+    bootstrap stability intervals, and routing analyses of which expert
+    corrects whom. Methods draw on mixture-of-experts neural networks by
     Jordan and Jacobs (1994) <doi:10.1007/978-1-4471-2097-1_113>,
-    fairness-aware learning by Hardt, Price, and Srebro (2016) <doi:10.48550/arXiv.1610.02413>,
-    and personalised treatment prediction for depression by Iniesta, Stahl, and McGuffin (2016) 
+    gradient boosting by Chen and Guestrin (2016)
+    <doi:10.1145/2939672.2939785>, cross-fitting by Chernozhukov et al. (2018)
+    <doi:10.1111/ectj.12097>, equalised odds by Hardt, Price and Srebro
+    (2016) <doi:10.48550/arXiv.1610.02413>, the random-effects variance
+    estimator of DerSimonian and Laird (1986)
+    <doi:10.1016/0197-2456(86)90046-2>, and personalised treatment prediction
+    for depression by Iniesta, Stahl and McGuffin (2016)
     <doi:10.1016/j.jpsychires.2016.03.016>.
 License: MIT + file LICENSE
 Encoding: UTF-8
+Language: en-GB
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
+Depends: R (>= 4.1.0)
 Imports:
     dplyr,
-    tibble,
-    ggplot2,
-    readr,
-    pROC,
-    magrittr,
-    tidyr,
-    purrr,
-    utils,
-    stats,
     ggalluvial,
+    ggplot2,
+    magrittr,
+    pROC,
+    purrr,
+    readr,
+    rlang,
+    stats,
+    tibble,
+    tidyr,
     tidyselect,
-    rlang
+    utils
 Suggests:
     knitr,
+    rmarkdown,
+    testthat (>= 3.0.0),
     torch,
-    testthat,
-    readxl,
-    rmarkdown
+    xgboost (>= 3.1.0)
+Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://github.com/rhysholland/FairGATE
-BugReports: https://github.com/rhysholland/FairGate/issues
-Depends: R (>= 4.1.0)
-SystemRequirements: Optional 'LibTorch' backend; install via torch::install_torch().
+BugReports: https://github.com/rhysholland/FairGATE/issues
+SystemRequirements: Optional 'LibTorch' backend for the neural-network
+    components; install via torch::install_torch().
 LazyData: true
+Config/roxygen2/version: 8.1.0
